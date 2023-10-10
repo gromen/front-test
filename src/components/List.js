@@ -1,7 +1,12 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import {useDispatch, useSelector} from "react-redux";
+import {setPhotos} from "../reducers/app";
+import {Grid, GridItem} from "@chakra-ui/react";
 
 const List = () => {
+  const dispatch = useDispatch();
+  const photos = useSelector(state => state.list)
   const [images, setImages] = useState([]);
 
   const ACCESS_KEY = process.env.REACT_APP_UNSPLASH_CLIENT_ID;
@@ -16,6 +21,7 @@ const List = () => {
           },
         })
         console.log(response.data)
+        dispatch(setPhotos())
         setImages(response.data)
 
       } catch(error) {
@@ -25,12 +31,15 @@ const List = () => {
     getImages()
   }, []);
 
-  return <div style={{ minHeight: "90vh", width: "100%" }}>
-    {images?.map(image=>(
-      <img key={image.slug} src={image.urls.small} alt={image.alt_description}/>
+  return <Grid templateColumns='repeat(3, 1fr)' gap={40} className="mt-10">
+    {images?.map(image => (
+      <GridItem key={image.slug}>
+        <GridItem>
+          <img src={image.urls.small} alt={image.alt_description}/>
+        </GridItem>
+      </GridItem>
     ))}
-  <
-  /div>;
+  </Grid>;
 };
 
 export default List;
