@@ -8,7 +8,7 @@ const Header = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setSeconds(seconds + 1);
+      setSeconds(prevSeconds => prevSeconds + 1);
     }, 1000);
 
     return () => {

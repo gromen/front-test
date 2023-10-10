@@ -1,12 +1,12 @@
 import { HStack, Text, VStack } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, {memo, useEffect, useMemo, useState} from "react";
 
 const Timer = () => {
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setSeconds(seconds + 1);
+      setSeconds(prevSeconds => prevSeconds + 1);
     }, 1000);
 
     return () => {
@@ -14,7 +14,7 @@ const Timer = () => {
     };
   }, []);
 
-  const date = new Date().toTimeString();
+  const date = useMemo(()=> new Date().toTimeString(), []);
 
   return (
     <VStack gap="10px" align="left">
@@ -30,4 +30,4 @@ const Timer = () => {
   );
 };
 
-export default Timer;
+export default memo(Timer);
