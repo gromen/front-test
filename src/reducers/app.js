@@ -23,7 +23,7 @@ export const appSlice = createSlice({
         throw new Error('Payload has to be boolean value')
       }
 
-      state.isLoading = payload
+      state.isLoading = payload;
     },
     incrementPage(state) {
       state.pageCurrent += 30
