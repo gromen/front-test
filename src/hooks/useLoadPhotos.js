@@ -1,6 +1,6 @@
 import {incrementPage, setIsLoading, setPhotos} from "../reducers/app";
 import {useDispatch, useSelector} from "react-redux";
-import {API_ACCESS_KEY} from "../shared";
+import axiosInstance from "../axios";
 
 export const useLoadPhotos = () => {
   const dispatch = useDispatch();
@@ -9,11 +9,8 @@ export const useLoadPhotos = () => {
   return async () => {
     try {
       dispatch(setIsLoading(true));
-      const response = await fetch(
-        `https://api.unsplash.com/photos?per_page=30&=page=${pageCurrent}&client_id=${API_ACCESS_KEY}`,
-        { method: 'GET' }
-      );
-      const newPhotos = await response.json();
+      const response = await axiosInstance.get(`/photos?page=${pageCurrent}`);
+      const newPhotos = await response.data;
       dispatch(setPhotos(newPhotos));
     } catch (error) {
       console.error('Error fetching more photos:', error);
