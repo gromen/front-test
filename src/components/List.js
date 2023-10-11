@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
 import {incrementPage, setPhotos, setIsLoading} from "../reducers/app";
@@ -6,13 +6,12 @@ import {Flex} from "@chakra-ui/react";
 
 const List = () => {
   const dispatch = useDispatch();
-  const photos = useSelector(state => state.app.photos)
+  const photosList = useSelector(state => state.app.list)
   const isLoading = useSelector(state => state.app.isLoading)
   const page = useSelector(state => state.app.pageCurrent)
-  const [images, setImages] = useState([]);
   const API_ACCESS_KEY = process.env.REACT_APP_UNSPLASH_CLIENT_ID;
 
-  const fetchMorePhotos = useCallback(async () => {
+  const fetchMorePhotos = async () => {
     try {
       dispatch(setIsLoading(true));
       const response = await fetch(
@@ -20,15 +19,14 @@ const List = () => {
         { method: 'GET' }
       );
       const newPhotos = await response.json();
-      console.log({newPhotos})
       dispatch(setPhotos(newPhotos));
-      dispatch(incrementPage());
     } catch (error) {
       console.error('Error fetching more photos:', error);
     } finally {
       dispatch(setIsLoading(false));
+      dispatch(incrementPage());
     }
-  }, [dispatch, page]);
+  };
 
   const handleScroll = () => {
     const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
@@ -48,15 +46,15 @@ const List = () => {
   useEffect(() => {
     const getImages = async()=> {
       try {
-        const response = await axios('https://api.unsplash.com/photos?per_page=30', {
+        const response = await axios(`https://api.unsplash.com/photos?per_page=30&page=${page}`, {
           method: 'GET',
           headers: {
             'Authorization': `Client-ID ${API_ACCESS_KEY}`,
           },
-        })
+        });
         console.log(response.data)
-        dispatch(setPhotos())
-        setImages(response.data)
+        dispatch(setPhotos(response.data))
+        console.log(photosList)
 
       } catch(error) {
         console.error('Error fetching images from Unsplash:', error);
@@ -65,10 +63,10 @@ const List = () => {
     getImages()
   }, []);
 
-  return <Flex justify="space-around" grow="1" wrap="wrap" className="mt-10 gap-4">
-    {images?.map(image => (
-      <div key={image.slug} className="w-[25%]">
-        <img src={image.urls.small} alt={image.alt_description}/>
+  return <Flex justify="space-around" grow="1" wrap="wrap" className="pt-10 gap-4">
+    {photosList?.map(photo => (
+      <div key={photo.slug} className="w-[25%]">
+        <img src={photo.urls.regular} alt={photo.alt_description}/>
       </div>
     ))}
     {isLoading && <p className="w-full">Loading photos...</p>}

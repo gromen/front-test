@@ -16,11 +16,11 @@ export const appSlice = createSlice({
       localStorage.setItem('isDarkMode', `${state.isDarkMode}`)
     },
     setPhotos(state, { payload }) {
-      state.list = [...state.list, payload]
+      state.list.push(...payload)
     },
     setIsLoading(state, { payload }) {
       if (typeof payload !== "boolean" ) {
-        throw new Error('Payload has to be boolean value')
+        console.error('"isLoading" Payload has to be boolean value')
       }
 
       state.isLoading = payload;
