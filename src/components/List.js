@@ -6,9 +6,9 @@ import {Flex} from "@chakra-ui/react";
 
 const List = () => {
   const dispatch = useDispatch();
-  const photos = useSelector(state => state.list)
-  const isLoading = useSelector(state => state.isLoading)
-  const page = useSelector(state => state.pageCurrent)
+  const photos = useSelector(state => state.app.photos)
+  const isLoading = useSelector(state => state.app.isLoading)
+  const page = useSelector(state => state.app.pageCurrent)
   const [images, setImages] = useState([]);
   const API_ACCESS_KEY = process.env.REACT_APP_UNSPLASH_CLIENT_ID;
 
@@ -19,8 +19,8 @@ const List = () => {
         `https://api.unsplash.com/photos?per_page=30&=page=${page}&client_id=${API_ACCESS_KEY}`,
         { method: 'GET' }
       );
-      debugger;
       const newPhotos = await response.json();
+      console.log({newPhotos})
       dispatch(setPhotos(newPhotos));
       dispatch(incrementPage());
     } catch (error) {
@@ -48,7 +48,7 @@ const List = () => {
   useEffect(() => {
     const getImages = async()=> {
       try {
-        const response = await axios('https://api.unsplash.com/photos', {
+        const response = await axios('https://api.unsplash.com/photos?per_page=30', {
           method: 'GET',
           headers: {
             'Authorization': `Client-ID ${API_ACCESS_KEY}`,

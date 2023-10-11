@@ -5,7 +5,7 @@ import {toggleTheme} from "../reducers/app";
 
 const ThemeSwitch = () => {
   const dispatch = useDispatch();
-  const isDarkMode = useSelector(state => state.isDarkMode)
+  const isDarkMode = useSelector(state => state.app.isDarkMode);
 
   const onChangeMode = () => {
     dispatch(toggleTheme())
@@ -15,7 +15,7 @@ const ThemeSwitch = () => {
   return (
     <VStack>
       <p>Dark theme</p>
-      <Switch colorScheme="teal" size="lg" checked={isDarkMode} onChange={onChangeMode}/>
+      <Switch colorScheme="teal" size="lg" isChecked={isDarkMode} onChange={onChangeMode}/>
     </VStack>
   );
 };

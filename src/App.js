@@ -7,13 +7,13 @@ import {useEffect} from "react";
 
 function App() {
   const dispatch = useDispatch()
-  const isDarkMode = useSelector(state => state.isDarkMode)
-  console.log({isDarkMode})
+  const isDarkMode = useSelector(state => state.app.isDarkMode)
 
   useEffect(() => {
     const isDarkMode = localStorage.getItem('isDarkMode') === 'true';
-    dispatch(toggleTheme(isDarkMode));
-  }, [dispatch]);
+    if (!isDarkMode) return;
+    dispatch(toggleTheme());
+  }, []);
 
   // use class "'dark-mode' to change theme"
   return (
