@@ -6,13 +6,13 @@ import {useLoadPhotos} from "../hooks/useLoadPhotos";
 const List = () => {
   const photosList = useSelector(state => state.app.list)
   const isLoading = useSelector(state => state.app.isLoading)
-  const loadMorePhotos = useLoadPhotos();
+  const loadPhotos = useLoadPhotos();
 
   const handleScroll = () => {
     const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
 
     if (scrollTop + clientHeight >= scrollHeight - 10 && !isLoading) {
-      loadMorePhotos();
+      loadPhotos();
     }
   };
 
@@ -24,7 +24,7 @@ const List = () => {
   }, [handleScroll]);
 
   useEffect(() => {
-    loadMorePhotos()
+    loadPhotos()
   }, []);
 
   return <Flex justify="space-around" grow="1" wrap="wrap" className="pt-10">
