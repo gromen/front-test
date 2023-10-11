@@ -29,9 +29,10 @@ const List = () => {
 
   return <Flex justify="space-around" grow="1" wrap="wrap" className="pt-10">
     {photosList?.map(photo => (
-      <div key={photo.slug} className="w-1/3 flex justify-center items-start">
+      <figure key={photo.slug} className="w-1/3 flex flex-col justify-start items-center">
         <img src={photo.urls.thumb} alt={photo.alt_description}/>
-      </div>
+        <figcaption>{photo.user.name}</figcaption>
+      </figure>
     ))}
     {isLoading && <p className="w-full">Loading photos...</p>}
   </Flex>;
