@@ -27,10 +27,10 @@ const List = () => {
     loadMorePhotos()
   }, []);
 
-  return <Flex justify="space-around" grow="1" wrap="wrap" className="pt-10 gap-4">
+  return <Flex justify="space-around" grow="1" wrap="wrap" className="pt-10">
     {photosList?.map(photo => (
-      <div key={photo.slug} className="w-[25%]">
-        <img src={photo.urls.regular} alt={photo.alt_description}/>
+      <div key={photo.slug} className="w-1/3 flex justify-center items-start">
+        <img src={photo.urls.thumb} alt={photo.alt_description}/>
       </div>
     ))}
     {isLoading && <p className="w-full">Loading photos...</p>}
