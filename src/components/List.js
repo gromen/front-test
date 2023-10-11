@@ -1,38 +1,23 @@
 import React, {useEffect} from "react";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
-import {incrementPage, setPhotos, setIsLoading} from "../reducers/app";
+import {setPhotos} from "../reducers/app";
 import {Flex} from "@chakra-ui/react";
+import {useLoadMorePhotos} from "../hooks/useLoadMorePhotos";
+import {API_ACCESS_KEY} from "../shared";
 
 const List = () => {
   const dispatch = useDispatch();
   const photosList = useSelector(state => state.app.list)
   const isLoading = useSelector(state => state.app.isLoading)
   const page = useSelector(state => state.app.pageCurrent)
-  const API_ACCESS_KEY = process.env.REACT_APP_UNSPLASH_CLIENT_ID;
-
-  const fetchMorePhotos = async () => {
-    try {
-      dispatch(setIsLoading(true));
-      const response = await fetch(
-        `https://api.unsplash.com/photos?per_page=30&=page=${page}&client_id=${API_ACCESS_KEY}`,
-        { method: 'GET' }
-      );
-      const newPhotos = await response.json();
-      dispatch(setPhotos(newPhotos));
-    } catch (error) {
-      console.error('Error fetching more photos:', error);
-    } finally {
-      dispatch(setIsLoading(false));
-      dispatch(incrementPage());
-    }
-  };
+  const loadMorePhotos = useLoadMorePhotos();
 
   const handleScroll = () => {
     const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
 
     if (scrollTop + clientHeight >= scrollHeight - 10 && !isLoading) {
-      fetchMorePhotos();
+      loadMorePhotos();
     }
   };
 
